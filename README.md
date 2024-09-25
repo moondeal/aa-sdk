@@ -1,101 +1,68 @@
 # nft2-sdk
 
-This is DareNFT 2.0 Protocol's officially supported node.js client library.
+SDK for Account Abstraction integration on DERA chain with support for smart accounts, user operations, bundler service, paymaster service that comply with ERC-4337.
 
 [![License](https://img.shields.io/npm/l/@cosmostation/cosmosjs.svg)](https://www.npmjs.com/package/@darenft-labs/nft2-client)
 
 ## Installing
 
 Install by yarn
+
 ```
-yarn add @darenft-labs/nft2-client
+yarn add @derachain/aa-sdk
 ```
 
 or using npm
+
 ```
-npm add @darenft-labs/nft2-client
+npm i @derachain/aa-sdk
 ```
 
 **Note:** node version should be greater than 16.14
 
 ## Quick start
 
-```js
-import { NFT2Client } from "@darenft-labs/nft2-client";
+```typescript
+import {createSmartAccountClient} from '@derachain/aa-sdk';
 
-const apiKey = 'xxx'; // must get from NT2 console 
-const nft2Client = new NFT2Client(apiKey);
-
-await nft2Client.initialize().then(() => {
-    console.log('Client init success: ', nft2Client);
+const smartAccount = await createSmartAccountClient({
+  signer: viemWalletOrEthersSigner,
+  bundlerUrl: '', // From dashboard.biconomy.io
+  paymasterUrl: '', // From dashboard.biconomy.io
 });
+
+const {wait} = await smartAccount.sendTransaction({to: '0x...', value: 1});
+
+const {
+  receipt: {transactionHash},
+  success,
+} = await wait();
 ```
 
-The SDK will automatic load configuration from API server (`GET: /configs/internal-config`). However, you can set your alternative configuration as you want:
-```js
-const configs: ChainConfig[] = [{
-  chainId: 1,
-  providerUrl: "https://eth-mainnet.nodereal.io/v1/xxx",
-  factoryAddress: "0xabcd",
-  subQueryEndpoint: "https://api.subquery.network/sq/xxx"
-}]
-nft2Client.updateConfig(configs)
-```
+## Documentation and Resources
 
-Example get list NFTs of a wallet on Ether:
-```js
-const chainId = 1; // chain Ether
-const nft2Contract = nft2Client.getNFT2Contract(chainId);
+For a comprehensive understanding of our project and to contribute effectively, please refer to the following resources:
 
-const nfts = await nft2Contract.getNFTsByOwner(ownerAddress, {limit: 20, offset: 0});
-console.log('nft: ', nfts);
-```
+- [**Biconomy Documentation**](https://docs.biconomy.io)
+- [**Biconomy Dashboard**](https://dashboard.biconomy.io)
+- [**API Documentation**](https://bcnmy.github.io/biconomy-client-sdk)
+- [**Contributing Guidelines**](./CONTRIBUTING.md): Learn how to contribute to our project, from code contributions to documentation improvements.
+- [**Code of Conduct**](./CODE_OF_CONDUCT.md): Our commitment to fostering an open and welcoming environment.
+- [**Security Policy**](./SECURITY.md): Guidelines for reporting security vulnerabilities.
+- [**Changelog**](./CHANGELOG.md): Stay updated with the changes and versions
 
-Example get NFT data saved on Data Registry:
-```js
-const chainId = 1; // chain Ether
-const dataRegistry = nft2Client.getNFT2DataRegistry(chainId);
+## 💼 Examples
 
-const datas = await dataRegistry.getNFTMetaData(
-    '0xabcd', // NFT address
-    '0' // token ID
-);
-console.log('datas: ', datas);
-```
+- [Initialise a smartAccount](examples/INITIALISE_A_SMART_CONTRACT.md)
+- [send some eth with sponsorship](examples/SEND_SOME_ETH_WITH_SPONSORSHIP.md)
+- [send a multi tx and pay gas with an erc20 token](examples/SEND_A_MULTI_TX_AND_PAY_GAS_WITH_TOKEN.md)
+- [create and use a session](examples/CREATE_AND_USE_A_SESSION.md)
+- [create and use a batch session](examples/CREATE_AND_USE_A_BATCH_SESSION.md)
 
-## Architecture
+## License
 
-- [Class diagram](./docs/class-diagram.md)
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details
 
-## Run sample
+## Connect with Biconomy 🍊
 
-Install libs
-```
-yarn install
-```
-
-Edit `.env` file in `/samples` folder
-```
-cp .env.example .env
-```
-
-Run 1 sample
-```
-yarn ts-node samples/[file_name].ts
-```
-
-## Run tests
-```
-yarn test -g protocolclient
-```
-
-Run with debug logging
-```
-yarn test-debug -g protocolclient
-```
-
-Testing a single file
-```
-yarn test-single test/xxx.ts
-yarn test-debug test/
-```
+[![Website](https://img.shields.io/badge/🍊-Website-ff4e17?style=for-the-badge&logoColor=white)](https://biconomy.io) [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/biconomy) [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/biconomy) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/company/biconomy) [![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/biconomy) [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/channel/UC0CtA-Dw9yg-ENgav_VYjRw) [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/bcnmy/)

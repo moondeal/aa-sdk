@@ -1,15 +1,7 @@
-import 'reflect-metadata';
+import {DeraChainSmartAccountV2} from './DeraChainSmartAccountV2';
 
-export * from './auth/constants';
-export {AuthClient} from './auth/authclient';
-export {CredentialRequest, Credentials} from './auth/credentials';
-export {OAuth2Client} from './auth/oauth2client';
-export {TokenPayload} from './auth/loginticket';
+export * from './consts';
+export * from '@biconomy/account';
 
-export {NFT2Client} from './nft2client';
-export {NFT2Contract} from './nft2contract';
-export {NFT2DataRegistry} from './nft2dataregistry';
-
-export * from './types';
-export * as utils from './utils';
-export {subqueryService} from './services/subquery.service';
+export const createSmartAccountClient =
+  DeraChainSmartAccountV2.createSmartAccount;
